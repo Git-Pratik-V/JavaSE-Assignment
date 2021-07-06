@@ -1,0 +1,122 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 18/06/2021
+Topic :- Assignment-JDBC1
+Language used :- Java
+######################### 
+
+1) create a table "Student"
+
+	rollno,name,age
+
+write a java program to accept rollno,name,age from user and insert a row.
+
+after inserting that row try to view using a query.
+
+program:-
+
+import java.sql.*;
+public class Jdbc1 {
+		public static void main(String args[])
+		{
+			String ss="jdbc:mysql://localhost:3306/javadb";
+			try(Connection con=DriverManager.getConnection(ss,"root","12345"))
+			{
+	System.out.println("Implementation class is\t"+con.getClass()); 
+	Statement st=con.createStatement();
+	
+	
+	int val=st.executeUpdate("insert into Student (rollno,name,age) values(4,'lalit',15)");
+	
+	ResultSet rs=st.executeQuery("select * from Student");
+	
+	while(rs.next())
+	{
+		int roll=rs.getInt("rollno");
+		String n=rs.getString("name");
+		String ag=rs.getString("age");
+		System.out.println(roll+"\t"+n+"\t"+ag);
+	}
+	if(val>0)
+	{
+		System.out.println("result updated");
+	}
+	}
+			
+			
+	catch(Exception ee)
+	{
+		System.out.println(ee);
+	}
+	}
+}
+
+output:-
+
+Implementation class is	class com.mysql.jdbc.JDBC4Connection
+1	haresh	21
+1	haresh	21
+2	sagar	24
+2	sagar	24
+3	rajesh	25
+4	lalit	15
+4	lalit	15
+result updated
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2) create table "Employee"
+	empid,empname,desig
+
+	add 5 records manually.
+
+   Now write a java program to accept "designation" from user and retrieve employees with the given designation.
+
+Program:-
+
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class Jdbc2 {
+
+	public static void main(String[] args) {
+		
+		String ss="jdbc:mysql://localhost:3306/javadb";
+		try(Connection con=DriverManager.getConnection(ss,"root","12345"))
+		{
+System.out.println("Implementation class is\t"+con.getClass()); 
+PreparedStatement ps=con.prepareStatement("select * from Emplyoee where desig=?");
+ps.setString(1,"manager");
+boolean val=ps.execute();
+System.out.println(val);
+
+ResultSet rs=ps.executeQuery();
+while(rs.next())
+{
+	int empid=rs.getInt("empid");
+	String n=rs.getString("empname");
+	String ag=rs.getString("desig");
+	System.out.println(empid+"\t"+n+"\t"+ag);
+}
+
+	}
+		catch(Exception ee)
+		{
+			System.out.println(ee);
+		}
+
+}
+}
+
+
+output:-
+
+Implementation class is	class com.mysql.jdbc.JDBC4Connection
+true
+4	bhavesh	manager
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+

@@ -1,0 +1,376 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 29/06/2021
+Topic :- Assignment-Hibernate2
+Language used :- Java
+######################### 
+
+Home.jsp
+
+<h1>Home Page</h1>
+<a href="Register.jsp">click Here for Registration</a><br><br>
+<a href="ViewServ">click Here for View</a>
+---------------------------------------------------------------------------------
+
+
+Register.jsp
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="RegisterServ" method=post>
+Name:<input type="text" name="nm"/><br><br>
+City:<input type="text" name="city"/><br><br>
+Email:<input type="text" name="em"/><br><br>
+Uname:<input type="text" name="um"/><br><br>
+Password:<input type="password" name="pass"/><br><br>
+
+<input type="submit" value="submit">
+
+
+</form>
+
+</body>
+</html>
+
+----------------------------------------------------------------------------------------
+
+ViewRegister.jsp
+
+
+<%@page import="java.util.*" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<h1>List of Registration</h1>
+<c:forEach var="str" items="${requestScope.key}">
+ ${str}
+ <br>
+</c:forEach>
+
+
+-----------------------------------------------------------------------------------------------
+
+
+RegisterServ.java
+
+
+import java.io.PrintWriter;
+
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import mypack.Register;
+import mypack.HibernateUtil;
+import org.hibernate.*;
+
+
+@WebServlet("/RegisterServ") 
+public class RegisterServ extends HttpServlet
+
+{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Session session;
+	public void doPost(HttpServletRequest request,HttpServletResponse response)
+	{
+		try
+		{
+			session = HibernateUtil.getSessionFactory().openSession(); 
+			System.out.println("after change");
+			response.setContentType("text/html");
+			PrintWriter out=response.getWriter();
+			//String name=request.getParameter("name");
+			//String subject=request.getParameter("subject");
+			//int cost=Integer.parseInt(request.getParameter("cost").trim());
+			Register r1=new Register();
+			//r1.setId(Integer.parseInt(request.getParameter("id")));
+			r1.setName(request.getParameter("nm"));  
+			r1.setCity(request.getParameter("city"));
+			
+			r1.setEmail(request.getParameter("em"));
+			r1.setUname(request.getParameter("um"));
+			r1.setPassword(request.getParameter("pass"));
+			
+			Transaction tx = session.beginTransaction();
+			session.save(r1);
+			tx.commit();
+			session.close();
+			out.println("Done");
+		}
+		catch(Exception ee)
+		{
+			System.out.println("in service  "+ee);
+		}
+	}
+}
+
+
+--------------------------------------------------------------------------------------------------
+
+ViewServ.java
+
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.hibernate.query.*;
+
+import org.hibernate.Session;
+import mypack.HibernateUtil;
+import mypack.Register;
+
+/**
+ * Servlet implementation class ViewServ
+ */
+@WebServlet("/ViewServ")
+public class ViewServ extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		PrintWriter out=response.getWriter();
+		out.println("Shubham");
+		try
+		{
+			Session ss= HibernateUtil.getSessionFactory().openSession();
+			Query<?> query=ss.createQuery("from Register");
+			
+			
+			List<Register> mylist=(List<Register>)query.list();
+			
+			request.setAttribute("key",mylist);
+			RequestDispatcher rd= request.getRequestDispatcher("ViewRegister.jsp");
+			rd.forward(request, response);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+
+}
+
+
+---------------------------------------------------------------------------------------------------------
+
+HibernateUtil.java
+
+
+
+package mypack;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.service.ServiceRegistry;
+
+public class HibernateUtil {
+    private static final SessionFactory sessionFactory; 
+   static { 
+        try { 
+        	 // Create registry
+        	 ServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+        	
+        	 // Create MetadataSources
+             MetadataSources sources = new MetadataSources(registry);
+             // Create Metadata
+             Metadata metadata = sources.getMetadataBuilder().build();
+             // Create SessionFactory
+             sessionFactory = metadata.getSessionFactoryBuilder().build();
+        } catch (Throwable ex) { 
+            System.err.println("Initial SessionFactory creation failed." + ex); 
+            throw new ExceptionInInitializerError(ex); 
+        } 
+    } 
+  
+    public static SessionFactory getSessionFactory() { 
+        return sessionFactory; 
+    } 
+}
+
+
+
+----------------------------------------------------------------------------------------------------
+
+Register.java
+
+
+
+package mypack;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Register")
+public class Register
+{
+	private int id;
+	private String name;
+	private String city;
+	private String email;
+	private String uname;
+	private String  password;
+	
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public String getUname() {
+		return uname;
+	}
+	public void setUname(String uname) {
+		this.uname = uname;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	@Override
+	public String toString() {
+		return "Register [id=" + id + ", name=" + name + ", city=" + city + ", email=" + email + ", uname=" + uname
+				+ ", password=" + password + "]";
+	}
+	
+	
+}
+
+-----------------------------------------------------------------------------------------------------
+
+hibernate.cfg.xml
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+<property name="show_sql">true</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/java</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <mapping class="mypack.Register"/> 
+    </session-factory>
+</hibernate-configuration>
+
+
+
+----------------------------------------------------------------------------------------------------------
+
+pom.xml
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>Hiber2</groupId>
+  <artifactId>Hiber2</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.2.3</version>
+      </plugin>
+    </plugins>
+  </build>
+      <properties>
+         <hibernate.version>5.3.7.Final</hibernate.version>
+    </properties> 
+   <dependencies>
+  <dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>${hibernate.version}</version>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId> 
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.25</version>
+    <scope>runtime</scope>
+ </dependency> 
+ <dependency>
+    <groupId>org.glassfish.web</groupId>
+    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+    <version>1.2.6</version>
+</dependency>
+  </dependencies>
+</project>
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,203 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 21/06/2021
+Topic :- Assignment-Servlet1
+Language used :- Java
+######################### 
+
+
+1) create a table "student" with
+	rollno,name,age,qualification
+
+	
+	create "student.html" to accept rollno,name,age and qualification from a user.
+
+	after submit, control should go to "StudentServ1" which will save above information inside "student" table.
+
+Program:-
+
+Student.html
+
+<html>
+<body>
+<form action="StudentServ1" method="post">
+Enter rollno: <input type=text name="rollno"/>
+<br>
+Enter name: <input type=text name="name"/>
+	<br>
+Enter age: <input type=text name="age"/>
+<br>
+Enter Qualification: <input type=text name="qualification"/>
+
+	<br><br>
+<input type=submit>
+</form>
+</body>
+</html>
+
+
+Program:-
+StudentServ1.java
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.sql.*;
+public class StudentServ1 extends HttpServlet
+{
+	private Connection con;
+	public void init()
+	{
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			String url="jdbc:mysql://localhost:3306/javadb";
+			con=DriverManager.getConnection(url,"root","12345");
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+	}
+	public void doPost(HttpServletRequest request,HttpServletResponse response)
+	{
+		try
+		{
+			response.setContentType("text/html");
+			PrintWriter pw=response.getWriter();
+			int rollno=Integer.parseInt(request.getParameter("rollno").trim());
+			String name=request.getParameter("name");
+			int age=Integer.parseInt(request.getParameter("age").trim());
+			String qualification=request.getParameter("qualification");
+			PreparedStatement pst=con.prepareStatement("insert into student1 values(?,?,?,?)");
+			pst.setInt(1,rollno);
+			pst.setString(2,name);
+			pst.setInt(3,age);
+			pst.setString(4,qualification);
+			int k=pst.executeUpdate();
+			if(k>0)
+			{
+				pw.println("Record has been added");
+			}
+			else
+			{
+				pw.println("cannot add");
+			}
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+	}
+}
+
+Output:-
+mysql> select * from student1;
++--------+------+------+---------------+
+| rollno | name | age  | qualification |
++--------+------+------+---------------+
+|      1 | Ram  |   25 | BE            |
++--------+------+------+---------------+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+2) create a table "book" with
+		id,bookname,authorname,price
+
+	add 4 records.
+
+  write a Servlet "BookServ" which will retrieve all the records from "book" table and display.
+
+
+
+Program:-
+
+Book.html
+
+<html>
+<body>
+<form action="BookServ" method="post">
+Enter id: <input type=text name="id: "/>
+<br>
+Enter bookname: <input type=text name="bookname"/>
+	<br>
+Enter authorname: <input type=text name="authorname"/>
+<br>
+Enter price: <input type=text name="price"/>
+
+	<br><br>
+<input type=submit>
+</form>
+</body>
+</html>
+
+BookServ.java
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.sql.*;
+public class BookServ extends HttpServlet
+{
+	private Connection con;
+	public void init()
+	{
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			String url="jdbc:mysql://localhost:3306/javadb";
+			con=DriverManager.getConnection(url,"root","12345");
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+	}
+	public void doPost(HttpServletRequest request,HttpServletResponse response)
+	{
+		try
+		{
+			response.setContentType("text/html");
+			PrintWriter pw=response.getWriter();
+			int id=Integer.parseInt(request.getParameter("id").trim());
+			String bookname=request.getParameter("bookname");
+			String authorname=request.getParameter("authorname");
+			int price=Integer.parseInt(request.getParameter("price").trim());
+			PreparedStatement pst=con.prepareStatement("insert into book values(?,?,?,?)");
+			pst.setInt(1,id);
+			pst.setString(2,bookname);
+			pst.setString(3,authorname);
+			pst.setInt(4,price);
+			int k=pst.executeUpdate();
+			if(k>0)
+			{
+				pw.println("Record has been added");
+			}
+			else
+			{
+				pw.println("cannot add");
+			}
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+	}
+}
+
+
+outpit:-
+
+
+mysql> select * from book;
++------+----------+----------------+-------+
+| id   | bookname | authorname     | price |
++------+----------+----------------+-------+
+|    1 | Java     | Denis Ritchy   |   750 |
+|    2 | C        | Yashwant       |   350 |
+|    3 | Php      | Ms Publication |   580 |
+|    4 | Html     | S.Kumar        |   470 |
++------+----------+----------------+-------+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

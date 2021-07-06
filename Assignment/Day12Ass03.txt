@@ -1,0 +1,214 @@
+AddServ.java
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import mypack.StrudentDAO;
+import mypack.Student;
+import mypack.StudentDAODataImpl;
+import mypack.StudentDAOFileImpl;
+
+
+/**
+ * Servlet implementation class AddServ
+ */
+@WebServlet("/AddServ")
+public class AddServ extends HttpServlet 
+{
+	
+	private static final long serialVersionUID = 1L;
+	
+	static void perform(StrudentDAO ref, Student sf)
+	{
+		ref.addStudent(sf);
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		PrintWriter out=response.getWriter();
+		
+		int rollno= Integer.parseInt(request.getParameter("rno"));
+		String name= request.getParameter("nm");
+		String city= request.getParameter("city");
+		String storagefor= request.getParameter("same");
+		
+		Student st=new Student();
+		st.setName(name);
+		st.setCity(city);
+		
+		if(storagefor.equalsIgnoreCase("file"))
+		{
+			st.setRollno(rollno);
+			perform(new StudentDAOFileImpl(),st);		
+		}
+		
+		else if(storagefor.equalsIgnoreCase("database"))
+		{
+			perform(new StudentDAODataImpl(),st);	
+		}
+		else
+		{
+			out.println("plz select appropriciate option");
+		}	
+		
+	}
+
+}
+
+------------------------------------
+StrudentDao.java
+
+
+package mypack;
+
+public interface StrudentDAO 
+{	
+	void addStudent(Student std);
+}
+
+----------------------
+
+Student.java
+
+
+package mypack;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Student implements Serializable
+{
+	
+	private int rollno;
+	private String name;
+	private String city;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="RollNo")
+	public int getRollno() {
+		return rollno;
+	}
+	public void setRollno(int rollno) {
+		this.rollno = rollno;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	@Override
+	public String toString() {
+		return "Student [rollno=" + rollno + ", name=" + name + ", city=" + city + "]";
+	}
+}
+
+
+--------------------
+StudentDAODataImpl
+
+
+package mypack;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+public class StudentDAODataImpl implements StrudentDAO
+{
+	public void addStudent(Student std)
+	{
+		try
+		{
+			Session ss= HibernateUtil.getSessionFactory().openSession();
+			Transaction trans = ss.beginTransaction();
+			
+			ss.save(std);
+			trans.commit();
+			System.out.println("Done With Database");
+			
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+		
+	}
+
+}
+
+
+---------------------------
+StudentDAOFileImpl
+
+package mypack;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.io.Serializable;
+
+public class StudentDAOFileImpl implements StrudentDAO 
+{
+	private static final long serialVersionUID = 1L;
+	
+	public void addStudent(Student std)
+	{
+		
+		try(FileOutputStream fo= new FileOutputStream("E://Student.txt"))
+		{
+				ObjectOutputStream ob= new ObjectOutputStream(fo);
+				ob.writeObject(std);
+				System.out.println("Done With File");
+		}
+		
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+}
+
+
+-------------------------
+
+Add.jsp
+
+
+
+<form  action="AddServ" method="post">
+
+Enter RollNo: <input type="text" name="rno"><br><br>
+Enter Name: <input type="text" name="nm"><br><br>
+Enter City: <input type="text" name="city"><br><br>
+
+<select name="same">
+
+<option>Select</option>
+<option value="file">File</option>
+<option value="database">Database</option>
+
+</select>
+<input type="submit" value="Submit">
+
+</form>

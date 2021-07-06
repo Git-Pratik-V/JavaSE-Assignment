@@ -1,0 +1,332 @@
+ProductServ
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import mypack.HibernateUtil;
+import mypack.Product;
+
+/**
+ * Servlet implementation class AddServ1
+ */
+@WebServlet("/ProductServ")
+public class ProductServ extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String name=request.getParameter("nm");
+		int qty=Integer.parseInt(request.getParameter("pr").trim());
+		int price=Integer.parseInt(request.getParameter("qt").trim());
+		
+		try 
+		{
+			
+		Session session=HibernateUtil.getSessionFactory().openSession();
+		Transaction tra=session.beginTransaction();
+		Product p1=new Product();
+		p1.setName(name);
+		p1.setQty(qty);
+		p1.setPrice(price);
+	    session.save(p1);
+	    tra.commit();
+	    RequestDispatcher req=request.getRequestDispatcher("Home.jsp");
+	    req.forward(request, response);
+		
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+	}
+
+}
+
+
+
+-------------------
+ViewServ
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.query.*;
+
+import mypack.HibernateUtil;
+import mypack.Product;
+
+/**
+ * Servlet implementation class ViewServ
+ */
+@WebServlet("/ViewServ")
+public class ViewServ extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		try
+		{
+			Session session=HibernateUtil.getSessionFactory().openSession();
+			
+			Query <?> ref=session.createQuery("from Product");
+			
+			List<Product> mylist=(List<Product>) ref.list();
+			
+			request.setAttribute("key", mylist);
+			RequestDispatcher res=request.getRequestDispatcher("View.jsp");
+			res.forward(request, response);
+			
+		}
+		catch(Exception ee)
+		{
+			
+		}
+	}
+
+}
+
+-----------------------
+
+Product java
+
+package mypack;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Product 
+{
+	private int pid;
+	private String name;
+	private int qty;
+	private int price;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	public int getPid() {
+		return pid;
+	}
+	public void setPid(int pid) {
+		this.pid = pid;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getQty() {
+		return qty;
+	}
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	@Override
+	public String toString() {
+		return "Product [pid=" + pid + ", name=" + name + ", qty=" + qty + ", price=" + price + "]";
+	}
+	
+
+}
+
+---------------
+
+HibernateUtil
+
+
+package mypack;
+
+
+
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.service.ServiceRegistry;
+
+public class HibernateUtil {
+  private static final SessionFactory sessionFactory; 
+ static { 
+      try { 
+      	 // Create registry
+      	 ServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+      	
+      	 // Create MetadataSources
+           MetadataSources sources = new MetadataSources(registry);
+           // Create Metadata
+           Metadata metadata = sources.getMetadataBuilder().build();
+           // Create SessionFactory
+           sessionFactory = metadata.getSessionFactoryBuilder().build();
+      } catch (Throwable ex) { 
+          System.err.println("Initial SessionFactory creation failed." + ex); 
+          throw new ExceptionInInitializerError(ex); 
+      } 
+  } 
+
+  public static SessionFactory getSessionFactory() { 
+      return sessionFactory; 
+  } 
+}
+
+
+----------------
+
+hibernate.cfg.xml
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+<property name="show_sql">true</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.password">root</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/final</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <mapping class="mypack.Product"/> 
+    </session-factory>
+</hibernate-configuration>
+
+
+----------------
+
+
+AddProduct.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+<h1>Fill Product Details</h1>
+</head>
+
+<body>
+<form action="AddServ" method="post">
+Name: <input type="text" name="nm"><br><br>
+Price: <input type="text" name="pr"><br><br>
+Quantity: <input type="text" name="qt"><br><br>
+<input type="submit">
+
+
+</form>
+
+</body>
+</html>
+
+-------------------------
+
+Home.jsp
+
+ <h1>Welcome Page</h1><br>
+<a href="AddProduct.jsp" >click here for adding product</a><br><br>
+<a href="ViewServ" >click here for watch mybag</a><br><br>
+
+-----------------------------------
+
+View.jsp
+
+
+<%@page import="java.util.*" isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<h1>List of Registration</h1>
+<c:forEach var="str" items="${requestScope.key}">
+ ${str}
+ <br>
+</c:forEach>>
+
+------------------------------
+
+pom.xml
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>Day12Ass1</groupId>
+  <artifactId>Day12Ass1</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/java</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.2.3</version>
+      </plugin>
+    </plugins>
+  </build>
+      <properties>
+         <hibernate.version>5.3.7.Final</hibernate.version>
+    </properties> 
+   <dependencies>
+  <dependency>
+    <groupId>org.hibernate</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>${hibernate.version}</version>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId> 
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.25</version>
+    <scope>runtime</scope>
+ </dependency> 
+ <dependency>
+    <groupId>org.glassfish.web</groupId>
+    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+    <version>1.2.6</version>
+</dependency>
+  </dependencies>
+</project>
+
+
+
+
