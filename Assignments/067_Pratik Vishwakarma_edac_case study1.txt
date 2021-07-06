@@ -1,0 +1,76 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 29/05/2021
+Topic :- Case Study 1
+Language used :- Java
+######################### 
+
+Developer Side:-
+
+package emppack;
+
+/**
+ * @author it is a package for our project employee
+ *
+ */
+public class Employee {
+	private String name,desig;
+	private double salary;
+	 public Employee ()
+	{
+		/*
+		 * this is default constructor
+		 */
+	}
+	public Employee(String name, String desig, double salary) {
+		super();
+		this.name = name;
+		this.desig = desig;
+		this.salary = salary;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getDesig() {
+		return desig;
+	}
+	public void setDesig(String desig) {
+		this.desig = desig;
+	}
+	public double getSalary() {
+		return salary;
+	}
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+	
+	/**
+	 * @param deafault constructor and one paramaterize constructor of Employee class
+	 * getters and setters for instance variables.
+	 */
+   
+}
+
+
+Client Side :-
+
+package Client;
+
+import emppack.Employee;
+
+public class Department {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Employee e=new Employee();
+		e.setName("dipak");
+		e.setDesig("Manager");
+		e.setSalary(30000);
+		System.out.println(e.getName()+" "+e.getDesig()+" "+e.getSalary());
+
+	}
+
+}

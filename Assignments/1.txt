@@ -1,0 +1,217 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 31/05/2021
+Topic :- Assignment5_Exception Handlimg & Package
+Language used :- Java
+######################### 
+
+1)Create abstract base class "Game" with 'play()' as abstract method.
+From that derive following classes.
+Football,Cricket,Tennis
+Create a class called as "GamesDemo" (public class)
+inside a main method create an array of "Game" (3 elements)
+Store objects of Football,Cricket and Tennis respectively.
+Now traverse the array and call that Cricket's play() method.
+
+
+abstract class Game
+{
+	abstract void play();
+}
+class Football extends Game
+{
+	public void play()
+	{
+		System.out.println("Play Football");
+	}
+}
+class Cricket extends Game
+{
+	public void play()
+	{
+		System.out.println("Play Cricket");
+	}
+}
+class Tennis extends Game
+{
+	public void play()
+	{
+		System.out.println("Play Tennis");
+	}
+}
+public class GamesDemo {
+
+	public static void main(String[] args) {
+		Game arr[]= new Game[3];
+		arr[0]=new Football();
+		arr[1]=new Cricket();
+		arr[2]=new Tennis();
+		
+		for(int i=0;i<arr.length;i++)
+		{
+			if(arr[i]==arr[1])
+			{
+		     arr[i].play();
+			}
+		}	
+	}
+}
+
+
+
+2) define your exception class by name "MyArithException"
+(MyArithException.java)
+define class "Calculator"   (Calculator.java)
+In this class define a function,which will accept an int and return double of it.
+e.g int caldouble(int)
+This function will check an int which is passed to it
+It will throw exception if 0 is passed or negative passed
+in case of 0 caller of this method should get error message
+"Zero not allowed" 
+in case of negative caller of this method should get error message
+"negative not allowed"
+In case of positive value it should simply return the double value.
+
+Now define class "MyCalcApp" (MyCalcApp.java)
+In this class you accept a number from user and pass that no. to
+caldouble() method which is mentioned above.
+
+class Calculator
+{
+	int res;
+ int caldouble(int num)throws Exception
+	{
+		if(num==0) 
+		{
+			throw new Exception("0 is not allowed please change");
+		}
+		else if(num<0)
+		{
+			throw new Exception("negative value not allowed please change");
+		}
+		res=num*2;
+		return res;	
+}
+}
+public class MyArithException {
+
+
+	public static void main(String[] args){
+		
+		Calculator c=new Calculator();
+		try {
+			c.caldouble(5);
+		} 
+		catch (Exception e) {
+			System.out.println("catch");
+		}
+		
+	}
+
+}
+
+
+
+3)create a package called "course"
+In this package create three classes
+a) Dac    with methods  term1()  and term2() 
+b) PreDac with  method  cet()
+c) Basic   with method  finalTest()
+
+Now write application called  "VitaApp" in which call all the methods  of the above mentioned classes.
+
+
+package course;
+class Dac
+{
+	String Duration="6 Months";
+	int fees=60000;
+	int strength=120;
+	String session="May21";
+	void term1()
+	{
+		System.out.println("Duration"+" "+Duration);
+		System.out.println("Course Fees"+" "+fees);
+	}
+	void term2()
+	{
+		System.out.println("Batch Strength"+" "+strength);
+		System.out.println("Seesion"+" "+session);
+	}
+}
+class PreDac
+{
+	String Date="3/04/2021";
+	int fees=600;
+	void cet()
+	{
+		System.out.println("cet Date"+" "+Date);
+		System.out.println("Exam fees"+" "+fees);
+	}
+}
+class Basic
+{
+	int testno=5;
+	 final void test()
+	{
+		System.out.println("Final Test"+" "+testno);
+	}
+}
+
+Vita App:-
+
+package course;
+
+public class VitaApp {
+
+	public static void main(String[] args) {
+		Dac d=new Dac();
+		d.term1();
+		d.term2();
+		PreDac p=new PreDac();
+		p.cet();
+		Basic b=new Basic();
+		b.test();
+	}
+
+}
+
+4)define a class called as "Item" (Item.java)
+with members
+String itemid;
+String name;
+int cost;
+
+parameterized constructor which will accept above details at the time
+of creating object.
+	member function
+void display()
+which will display all the details of product
+create instances of this class and call the method display.
+
+
+public class Item {
+
+	String itemid;
+	String name;
+	int cost;
+	
+	public Item(String itemid, String name, int cost) {
+		super();
+		this.itemid = itemid;
+		this.name = name;
+		this.cost = cost;
+	}
+	public void display()
+	{
+		System.out.println(itemid);
+		System.out.println(name);
+		System.out.println(cost);
+	}
+	public static void main(String[] args) {
+		Item i=new Item("item3","fridge",8000);
+		i.display();
+
+	}
+
+}

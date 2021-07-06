@@ -1,0 +1,164 @@
+################################
+Author :- Pratik Vishwakarma
+Date :- 15/06/2021
+Topic :- Assignment-Lambda Expression
+Language used :- Java
+###############################
+
+Q.1 define a functional interface "First" with an abstract method "void disp1()" , default method "void disp2()" and a static method "void disp3()"
+
+inside main function using lambda expression invoke "disp1()" and "disp2()" methods.
+also invoke "disp3()" method inside main.
+
+Program :-
+
+interface First
+{
+	void disp1();
+	default void disp2()
+	{
+		System.out.println("in disp2 method");
+	}
+	static void disp3()
+	{
+		System.out.println("in disp3 method");
+	}
+}
+class Main
+{
+
+	public static void main(String[] args) {
+
+	First ref=()->{System.out.println("in disp1");};
+	ref.disp1();
+	ref.disp2();
+	First.disp3();
+
+}
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Q.2) define a functional interface "Second" with an abstract method "void disp4()".
+
+define a class Demo with main function.
+inside main function create two implementations of "Second" using lambda expression and display their names.
+
+Program :-
+
+interface Second
+{
+	void disp4();
+}
+
+class Demo {
+
+	public static void main(String[] args) {
+	
+	Second ref1=()->{System.out.println("inside disp4 of first impl");};
+		ref1.disp4();
+		System.out.println(ref1.getClass().getName());
+
+		Second ref2=()->{System.out.println("inside disp4 of second impl");};
+		ref2.disp4();
+		System.out.println(ref2.getClass().getName());	
+
+	}
+
+}
+		
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Q.3) define a functional interface "MyInterface" with an abstract method "void fun()"
+
+define a class Demo with two functions "static void perform" and main.
+
+from main function pass lambda expression, collect it in "perform" method and invoke "fun()" function.
+
+Program :-
+
+interface MyInterface
+{
+	void fun();
+}
+
+class Demo
+{
+	
+	static void perform(MyInterface ref)
+	{
+			ref.fun();	
+	}
+	public static void main(String[] args) {
+	{
+		perform(()->{System.out.println("inside fun");});
+	}
+}
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Q.4) define a functional interface "Calculator" with an abstract method "int multiply(int a,int b)"
+define a class "CalcDemo" with main method.
+inside main using lambda create an implementation of "Calculator" , invoke "multiply()" method and display its result.
+
+Program :-
+
+interface Calculator
+{
+	int multiply(int a,int b);
+}
+
+class CalcDemo
+{
+	public static void main(String[] args) {
+		Calculator ref1=(a,b)->{return a*b;};
+		System.out.println(ref1.multiply(50,100));
+}
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Q.5) define a class "Display" with "void disp" method. inside this method display values from 1 to 10.
+
+create an implementation of "Runnable" using lambda expression which will invoke "disp()" method of "Display" class.
+
+create 2 threads and pass above created "Runnable" implementation to these threads.
+make sure while one thread is executing other thread will not interfere.
+
+
+Program :-
+
+class Display
+{
+	synchronized void disp()
+	{
+		for(int i=0;i<=10;i++ )
+		{
+			
+			System.out.println(i);
+	}
+}
+
+class Demo
+{
+	public static void main(String[] args) {
+		Display d=new Display();
+		
+		Runnable ref1=()->{ d.disp(); };
+
+		Thread t1=new Thread(ref1);
+		Thread t2=new Thread(ref1);
+
+		t1.start();
+		t2.start();
+
+}
+}
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+

@@ -1,0 +1,72 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 08/06/2021
+Topic :- Assignment6_MultiThreading1
+Language used :- Java
+######################### 
+
+1) create a multi-threaded application by using  "extends Thread " method.create 2 threads. they should display characters from A to J.
+
+Program:-
+public class CharThread extends Thread
+{
+
+	public void run()
+	{
+		for(char a='A'; a<='J'; a++  )
+		{
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+			System.out.println(a);
+		}
+	}
+	public static void main(String[] args) {
+		
+		CharThread ct=new CharThread();
+		CharThread ct1=new CharThread();
+		ct.setName("First");
+		ct1.setName("Second");
+		
+		ct.start();
+		ct1.start();
+	}
+
+}
+
+
+
+2) above program  using "implements Runnable" method.
+
+Program:-
+public class CharRunnable implements Runnable 
+{
+	public void run()
+	{
+		for(char a='A'; a<='J'; a++  )
+		{
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+			System.out.println(a);
+		}
+	}
+	public static void main(String[] args) {
+		
+		CharRunnable cr=new CharRunnable();
+		Thread t1=new Thread(cr);
+		Thread t2=new Thread(cr);
+		
+		t1.setName("First");
+		t2.setName("Second");
+		t1.start();
+		
+		t2.start();
+}
+}

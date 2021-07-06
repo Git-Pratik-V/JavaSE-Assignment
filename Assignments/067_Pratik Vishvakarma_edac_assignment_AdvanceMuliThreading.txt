@@ -1,0 +1,288 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 10/06/2021
+Topic :- Assignment-Advance Multi Threading
+Language used :- Java
+######################### 
+
+
+
+1) create a multi-threaded application by using Thread pool.create 2 threads. each thread should display characters from A to J. [ make sure while one thread executes , other thread should not interfere ]
+ 
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class Executers1  implements Runnable  {
+
+	synchronized public void run()
+	{
+		for(char a='A'; a<='J'; a++  )
+		{
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+			System.out.println(a+"\t"+Thread.currentThread());
+		}
+	}
+	public static void main(String[] args) {
+		
+		ExecutorService exec=Executors.newFixedThreadPool(2);
+		for(int i=0;i<2;i++)
+		{
+			exec.execute(new Executers1());
+		}
+		System.out.println("After submiting task");
+		exec.shutdown();
+	}
+
+}
+
+output :-
+
+After submiting task
+A	Thread[pool-1-thread-1,5,main]
+A	Thread[pool-1-thread-2,5,main]
+B	Thread[pool-1-thread-2,5,main]
+B	Thread[pool-1-thread-1,5,main]
+C	Thread[pool-1-thread-1,5,main]
+C	Thread[pool-1-thread-2,5,main]
+D	Thread[pool-1-thread-2,5,main]
+D	Thread[pool-1-thread-1,5,main]
+E	Thread[pool-1-thread-1,5,main]
+E	Thread[pool-1-thread-2,5,main]
+F	Thread[pool-1-thread-2,5,main]
+F	Thread[pool-1-thread-1,5,main]
+G	Thread[pool-1-thread-2,5,main]
+G	Thread[pool-1-thread-1,5,main]
+H	Thread[pool-1-thread-2,5,main]
+H	Thread[pool-1-thread-1,5,main]
+I	Thread[pool-1-thread-2,5,main]
+I	Thread[pool-1-thread-1,5,main]
+J	Thread[pool-1-thread-1,5,main]
+J	Thread[pool-1-thread-2,5,main]
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2) create a multi-threaded application by using Thread pool.create 2 threads. each thread should display numbers from 1 to 10. [ make sure while one thread executes , other thread should not interfere ]
+Also when first thread displays nos. from 1 to 5 it should released the lock and allow other thread to display nos. from 1 to 5 and then previous thread will display nos. from 6 to 10 and so on.
+
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class Executors2 implements Runnable
+{
+	synchronized public void run()
+	{
+		perform();
+	}
+	 void perform()
+	{
+		for(int i=0;i<=10;i++ )
+		{
+			if(i==6)
+			{
+			try {
+				wait();
+			} 
+			catch (InterruptedException e)
+			{
+				
+				e.printStackTrace();
+			}
+			}
+			System.out.println(i+"\t"+Thread.currentThread());
+			notifyAll();
+		}
+		
+	}
+	public static void main(String[] args) {
+		
+		ExecutorService exec=Executors.newFixedThreadPool(2);
+		for(int i=0;i<2;i++)
+		{
+			exec.execute(new Executors2());
+		}	
+	System.out.println("After submiting task");
+	exec.shutdown();
+	}
+}
+
+output:-
+
+After submiting task
+0	Thread[pool-1-thread-1,5,main]
+1	Thread[pool-1-thread-1,5,main]
+2	Thread[pool-1-thread-1,5,main]
+3	Thread[pool-1-thread-1,5,main]
+4	Thread[pool-1-thread-1,5,main]
+5	Thread[pool-1-thread-1,5,main]
+0	Thread[pool-1-thread-2,5,main]
+1	Thread[pool-1-thread-2,5,main]
+2	Thread[pool-1-thread-2,5,main]
+3	Thread[pool-1-thread-2,5,main]
+4	Thread[pool-1-thread-2,5,main]
+5	Thread[pool-1-thread-2,5,main]
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+3) create a multi-threaded application by using Thread pool and ReentrantLock (explicit locking) .create 2 threads. each thread should display characters from A to J. [ make sure while one thread executes , other thread should not interfere ]
+
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.*;
+class Myapp implements Runnable
+{
+	ReentrantLock mylock=new ReentrantLock();
+	public void run()
+	{
+		mylock.lock();
+		for(char a='A'; a<='J'; a++  )
+		{
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
+			}
+			System.out.println(a);
+		}
+		mylock.unlock();
+}
+}
+public class Reentlock1 {
+
+	public static void main(String[] args) {
+		
+		ExecutorService exec=Executors.newFixedThreadPool(2);
+		Myapp m=new Myapp();
+		for(int i=0;i<2;i++)
+		{
+			exec.execute(m);
+		}
+		System.out.println("After submiting task");
+		exec.shutdown();
+	}
+
+}
+
+output:-
+
+
+After submiting task
+A
+B
+C
+D
+E
+F
+G
+H
+I
+J
+A
+B
+C
+D
+E
+F
+G
+H
+I
+J
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+4) create a multi-threaded application by using Thread pool and ReentrantLock.create 2 threads. each thread should display numbers from 1 to 10. [ make sure while one thread executes , other thread should not interfere ]
+Also when first thread displays nos. from 1 to 5 it should released the lock and allow other thread to display nos. from 1 to 5 and then previous thread will display nos. from 6 to 10 and so on.
+
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
+class Myappli implements Runnable
+{
+	ReentrantLock mylock=new ReentrantLock();
+	Condition c=mylock.newCondition();
+	public void run()
+	{
+		mylock.lock();
+		for(int i=0;i<=10;i++ )
+		{
+			if(i==6)
+			{
+			try {
+				c.await();
+			} 
+			catch (InterruptedException e)
+			{
+				
+				e.printStackTrace();
+			}
+			}
+			System.out.println(i);
+			c.signalAll();
+		
+}
+		mylock.unlock();
+		
+}
+}
+public class Reentrent2 {
+
+	public static void main(String[] args) {
+		
+		ExecutorService exec=Executors.newFixedThreadPool(2);
+		Myappli m=new Myappli();
+		for(int i=0;i<2;i++)
+		{
+			exec.execute(m);
+		}
+		System.out.println("After submiting task");
+		exec.shutdown();
+	}
+}
+
+
+
+output:-
+
+0
+After submiting task
+1
+2
+3
+4
+5
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+6
+7
+8
+9
+10
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+

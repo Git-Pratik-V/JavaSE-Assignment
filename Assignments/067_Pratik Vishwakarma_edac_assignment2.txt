@@ -1,0 +1,102 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 27/05/2021
+Topic :- Assignment 2
+Language used :- Java
+######################### 
+
+1)create a class "Shape" with 2 attributes, "width" and "height". Make sure one can not access these attributes directly.
+provide accessor methods on these attributes and allow them to call from outside of your class.
+
+class Shape
+{
+private int width;
+private int height;
+
+void setWidth(int width)
+{
+   this.width=width;
+}
+int getWidth()
+{
+return width;
+}
+void setHeight(int height)
+{
+this.height=height;
+}
+int getHeight()
+{
+return height;
+}
+}
+public class Demo
+{
+public static void main(String args[])
+{
+Shape s1=new Shape();
+s1.setWidth(6);
+s1.setHeight(7);
+System.out.println("Width is"+" "+s1.getWidth()+"\t"+"Height is"+" "+s1.getHeight());
+
+}
+}
+
+2) Define a class "MyClass" and make sure clients can instantiate it , 
+a) without any argument
+b) with one int argument
+c) with two int arguments
+
+public class MyClass1
+{
+ int i;
+ int j;
+
+public MyClass1()
+{
+
+}
+public MyClass1(int i)
+{
+  this.i=i;
+  System.out.println(i);
+}
+
+public MyClass1(int i,int j)
+{
+   this.i=i;
+   this.j=j;
+System.out.println(i);
+System.out.println(j); 
+}
+
+public  int getcont()
+{
+return i;
+}
+public static void main(String args[])
+{
+MyClass1 m1=new MyClass1();
+
+MyClass1 m2=new MyClass1(200);
+
+MyClass1 m3=new MyClass1(300,400);
+}
+}
+
+3) Define a class "Emp" with private static member "int cnt".
+How will u make sure that outsiders can read the value of cnt ?
+
+public class Emp
+{
+private static  int id;
+
+public static getint()
+{
+  return id;
+}
+public static void main(String args[])
+{
+Emp e1=new Emp();
+
+}

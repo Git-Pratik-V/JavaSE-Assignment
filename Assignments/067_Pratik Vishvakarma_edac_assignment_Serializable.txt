@@ -1,0 +1,355 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 11/06/2021
+Topic :- Assignment-Serializable
+Language used :- Java
+######################### 
+
+1)create a customer class with following attributes
+	custid
+	custname
+	address
+	age
+create one instance of it and store it in a file. (Serialization).
+now open a file, read the object and read its contents . (Deserialization)
+
+Program:-
+
+
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+public class Customer1 implements Serializable {
+
+	
+	private static final long serialVersionUID = 1L;
+	int custid;
+	String custname;
+	String address;
+	int age;
+	public int getCustid() {
+		return custid;
+	}
+	public void setCustid(int custid) {
+		this.custid = custid;
+	}
+	public String getCustname() {
+		return custname;
+	}
+	public void setCustname(String custname) {
+		this.custname = custname;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	@Override
+	public String toString()
+	{
+		return "Customer[custid"+custid+"custname"+custname+"address"+address+"age"+age+"]";
+		
+	}
+	
+
+	public static void main(String args[])
+	{
+		Customer1 c=new Customer1();
+		c.setCustid(1);
+		c.setCustname("Viraj");
+		c.setAddress("Burhanpur");
+		c.setAge(15);
+		
+			try (FileOutputStream fos = new FileOutputStream("E:\\Edac-VITA\\Core Java\\Eclipse_Work\\Serializable\\abc.txt"))
+			{
+				
+				try (ObjectOutputStream oos = new ObjectOutputStream(fos))
+				{
+			oos.writeObject(c);
+			}
+			}
+			catch (IOException e) {
+		
+			e.printStackTrace();
+		}
+		
+	
+}
+}
+
+Program:- Main Class
+
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+
+import pack1.Customer1;
+
+public class Demo1 {
+
+	public static void main(String[] args) {
+		
+		try(FileInputStream fis=new FileInputStream("E:\\Edac-VITA\\Core Java\\Eclipse_Work\\Serializable\\abc.txt"))
+		{
+		try(ObjectInputStream ois=new ObjectInputStream(fis))
+		{
+		Customer1 c=(Customer1)ois.readObject();
+		System.out.println(c.getCustid()+"\t"+c.getCustname()+"\t"+c.getAddress()+"\t"+c.getAge());
+		}
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+	}
+
+}
+
+output:-
+
+1	Viraj	Burhanpur	15
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+2) Person class implements Serializable with
+	private String name
+	private int age
+
+		getters and setters
+		parameterized constructor
+
+Student extends Person
+	private int rollno
+		getter and setters
+		parameterized constructor accepting name,age and rollno
+			pass name and age to the super constructor
+
+
+Demo class with main
+	create one object of Student, write it inside file and then read.
+
+Program:-
+
+package pack1;
+
+import java.io.Serializable;
+
+ class Person implements Serializable {
+	
+		private static final long serialVersionUID = 1L;
+		private String name;
+		private int age;
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public int getAge() {
+			return age;
+		}
+		public void setAge(int age) {
+			this.age = age;
+		}
+		public Person(String name, int age) {
+			super();
+			this.name = name;
+			this.age = age;
+		}
+		
+	}
+	  public class Students extends Person
+	{
+		
+		private static final long serialVersionUID = 1L;
+		private int rollno;
+		public Students(String name, int age,int rollno) {
+			super(name, age);
+			this.rollno=rollno;
+		}
+		public int getRollno() {
+			return rollno;
+		}
+		public void setRollno(int rollno) {
+			this.rollno = rollno;
+		}
+
+
+	}
+
+
+Program:- Main Class Deserialization
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import pack1.*;
+
+public class Demo2 {
+
+	public static void main(String[] args) {
+		
+		Students s=new Students("Ram", 10, 20);
+		try (FileOutputStream fos = new FileOutputStream("E:\\Edac-VITA\\Core Java\\Eclipse_Work\\Serializable\\student.txt"))
+		{
+			
+			try (ObjectOutputStream oos = new ObjectOutputStream(fos))
+			{
+		oos.writeObject(s);
+		}
+		}
+		catch (IOException e) {
+	
+		e.printStackTrace();
+	}
+		try(FileInputStream fis=new FileInputStream("E:\\Edac-VITA\\Core Java\\Eclipse_Work\\Serializable\\student.txt"))
+		{
+		try(ObjectInputStream ois=new ObjectInputStream(fis))
+		{
+			
+		System.out.println("Name "+s.getName()+"\t"+"Age "+s.getAge()+"\t"+"RollNo "+s.getRollno());
+		}
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+		
+	}
+
+}
+
+
+output:-
+
+Name Ram	Age 10	RollNo 20
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3) Define a class "Car" with
+	private int id and private String modelname;
+	setters and getters
+
+	create 2 objects of Car and write them inside filesystem and thereafter read both the objects and display.
+
+
+Program:-
+
+
+
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+public class Car implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+		private int id;
+		private String ModelName;
+		public int getId() {
+			return id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		public String getModelName() {
+			return ModelName;
+		}
+
+		public void setModelName(String modelName) {
+			ModelName = modelName;
+		}
+		
+		
+	public static void main(String[] args) {
+		
+		Car c1=new Car();
+		Car c2=new Car();
+		c1.setId(1010);
+		c1.setModelName("Swift");
+		c2.setId(2010);
+		c2.setModelName("Ferrari");
+		try (FileOutputStream fos = new FileOutputStream("E:\\Edac-VITA\\Core Java\\Eclipse_Work\\Serializable\\Car1.txt"))
+		{
+			
+			try (ObjectOutputStream oos = new ObjectOutputStream(fos))
+			{
+		oos.writeObject(c1);
+		}
+		}
+		catch (IOException e) {
+	
+		e.printStackTrace();
+	}
+		try(FileInputStream fis=new FileInputStream("E:\\Edac-VITA\\Core Java\\Eclipse_Work\\Serializable\\Car1.txt"))
+		{
+		try(ObjectInputStream ois=new ObjectInputStream(fis))
+		{
+			
+		System.out.println("Car id "+c1.getId()+"\t"+"Model Name "+c1.getModelName());
+		}
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+		
+	System.out.println("---------------------------------------------------------------------------------------------");	
+
+		try (FileOutputStream fos = new FileOutputStream("E:\\Edac-VITA\\Core Java\\Eclipse_Work\\Serializable\\Car2.txt"))
+		{
+			
+			try (ObjectOutputStream oos = new ObjectOutputStream(fos))
+			{
+		oos.writeObject(c2);
+		}
+		}
+		catch (IOException e) {
+	
+		e.printStackTrace();
+	}
+		try(FileInputStream fis=new FileInputStream("E:\\Edac-VITA\\Core Java\\Eclipse_Work\\Serializable\\Car1.txt"))
+		{
+		try(ObjectInputStream ois=new ObjectInputStream(fis))
+		{
+			
+		System.out.println("Car id "+c2.getId()+"\t"+"Model Name "+c2.getModelName());
+		}
+		}
+		catch(Exception ee)
+		{
+			ee.printStackTrace();
+		}
+	
+	}
+
+	
+}
+
+
+output:-
+
+
+Car id 1010	Model Name Swift
+---------------------------------------------------------------------------------------------
+Car id 2010	Model Name Ferrari
+

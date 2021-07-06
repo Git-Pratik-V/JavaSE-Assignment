@@ -1,0 +1,135 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 09/06/2021
+Topic :- Assignment-Multi Threading2
+Language used :- Java
+######################### 
+
+
+3) create 3 threads in such a way that while one thread is executing, 2 threads cannot interfere. they should display output "Exec  0" to "Exec 5".
+
+
+Program :-
+
+public class A implements Runnable{
+	synchronized public void run()
+	{
+		for(int i=0;i<=5;i++)
+		{
+			System.out.println("Exec "+i);
+		}
+	}
+
+}
+public class mul {
+
+	public static void main(String[] args) {
+		A ob=new A();
+		Thread t1=new Thread(ob);
+		Thread t2=new Thread(ob);
+		Thread t3=new Thread(ob);
+		t1.start();
+		t2.start();
+		t3.start();
+	}
+
+}
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+4)create 2 threads. Write a program which displays number 1 to 10 using class lock. 
+[hint:- use "implements Runnable" and synchronized block]
+
+
+
+class Th1 implements Runnable
+{
+	static Class cs;
+	static void disp()
+	{
+		synchronized (cs)
+		{
+			for(int i=0;i<=10;i++)
+			{
+				System.out.println(i);
+		}
+	}
+	}
+	public void run()
+	{
+		disp();
+	}
+}
+public class ClassLock1 {
+
+	public static void main(String[] args) {
+		cs=Class.forName("Th1");
+		Th1 th=new Th1();
+		Th1 th2=new Th1();
+		Thread t1=new Thread(th);
+		Thread t2=new Thread(th2);
+		t1.start();
+		t2.start();
+		
+	}
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+5) create 2 threads
+	one thread will display 1 to 50
+	second thread will display 50 to 1
+both the threads should start simultaneously.
+
+(use implements method)
+
+
+Program:-
+
+public class Asc implements Runnable {
+	public void run()
+	{
+		for(int i=1;i<=50;i++)
+		{
+			System.out.println("Asc"+i);
+		}
+		
+	}
+}
+public class Desc implements Runnable {
+	public void run()
+	{
+		for(int j=50;j>=1;j--)
+		{
+			System.out.println("Desc"+j);
+		}
+	}
+}
+public class mul {
+
+	public static void main(String[] args) {
+		Asc ob=new Asc();
+		Desc ob1=new Desc();
+		
+		
+		Thread t1=new Thread(ob);
+		Thread t2=new Thread(ob1);
+		
+		t1.start();
+		t2.start();
+	
+	}
+
+}
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

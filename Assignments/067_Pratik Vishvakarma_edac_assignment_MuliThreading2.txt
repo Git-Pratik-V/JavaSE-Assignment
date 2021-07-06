@@ -1,0 +1,162 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 09/06/2021
+Topic :- Assignment-Multi Threading2
+Language used :- Java
+######################### 
+
+
+3) create 3 threads in such a way that while one thread is executing, 2 threads cannot interfere. they should display output "Exec  0" to "Exec 5".
+
+
+Program :-
+
+
+public class ThreadDemo2 implements Runnable
+{
+
+	synchronized public void run()
+	{
+		for(int i=0;i<=5;i++)
+		{
+			System.out.println("Exec "+i);
+			try
+			{
+				Thread.sleep(100);
+			}
+			catch(InterruptedException ie)
+			{
+				ie.printStackTrace();
+			}
+	}
+
+}
+	public static void main(String[] args) {
+		
+		ThreadDemo2 obj=new ThreadDemo2();
+		Thread t1=new Thread(obj);
+		Thread t2=new Thread(obj);
+		Thread t3=new Thread(obj);
+		
+		t1.start();
+		t2.start();
+		t3.start();
+		System.out.println("Execution is done");
+	}
+
+}
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+4)create 2 threads. Write a program which displays number 1 to 10 using class lock. 
+[hint:- use "implements Runnable" and synchronized block]
+
+
+
+class Th1 implements Runnable
+{
+	static Class cs;
+	static void disp()
+	{
+		synchronized (cs)
+		{
+			for(int i=0;i<=10;i++)
+			{
+				System.out.println(i);
+		}
+	}
+	}
+	public void run()
+	{
+		disp();
+	}
+}
+public class ClassLock1 {
+
+	public static void main(String[] args) {
+		cs=Class.forName("Th1");
+		Th1 th=new Th1();
+		Th1 th2=new Th1();
+		Thread t1=new Thread(th);
+		Thread t2=new Thread(th2);
+		t1.start();
+		t2.start();
+		
+	}
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+5) create 2 threads
+	one thread will display 1 to 50
+	second thread will display 50 to 1
+both the threads should start simultaneously.
+
+(use implements method)
+
+
+Program:-
+
+class Thread1 implements Runnable
+{
+	public void run()
+		{
+		 	if(Thread.currentThread().getName().equalsIgnoreCase("Asc"))
+		 	{
+			for(int i=0;i<=50;i++)
+			{
+				System.out.println(i);
+				try
+				{
+					Thread.sleep(100);
+				}
+				catch(InterruptedException ie)
+				{
+					ie.printStackTrace();
+				}
+		}
+
+}
+		 	else
+		 	{
+		 		for(int i=50;i>=1;i--)
+				{
+					System.out.println(i);
+					try
+					{
+						Thread.sleep(100);
+					}
+					catch(InterruptedException ie)
+					{
+						ie.printStackTrace();
+					}
+			}
+		 	}
+}
+}
+public class ThreadDemo {
+
+	public static void main(String args[]) 
+	{
+		// TODO Auto-generated method stub
+		Thread1 t1=new Thread1();
+		Thread t3=new Thread(t1,"Asc");
+		Thread t4=new Thread(t1,"Desc");
+		t3.start();
+		t4.start();
+		System.out.println("Both threads are over");
+	}
+
+}
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

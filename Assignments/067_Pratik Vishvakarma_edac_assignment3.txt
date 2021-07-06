@@ -1,0 +1,403 @@
+##########################
+Author :- Pratik Vishwakarma
+Date :- 31/05/2021
+Topic :- Assignment3
+Language used :- Java
+######################### 
+
+1)Define 2 classes “First” and “Second” with member variables , member functions and constructors of  your choice.
+   Now define a class “Two” in which define main function . In main function create various instances of First and Second  
+   and call their individual member functions.
+
+class First{
+
+First() {
+	super();
+	System.out.println("First Constructor");
+}
+void dis(int a) {
+	System.out.println(a);
+}
+void dis(String s)
+{
+	System.out.println(s);
+}
+}
+class Second {
+	private int i=4;
+	protected int j=3;
+	public int k=2;
+	public Second() {
+		super();
+		System.out.println("Second Constructor");
+	}
+		public Second(int i)
+		{
+		    super();
+			System.out.println(i);
+		}
+	
+	void dis() {
+		System.out.println(i);
+		System.out.println(j);
+		System.out.println(k);
+	}
+}
+
+public class Two{
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	First f=new First();
+	f.dis(52);
+	f.dis("Sri");	
+	
+	Second s=new Second(6);
+	s.dis();
+	}
+
+}
+
+3) Define a class “Check” in which declare member variables using  different accessibility modifiers i.e.  <default>, 
+    private ,public and protected.   Define a function “disp”  which should be public.  Define a class “CheckDemo” 
+    in which you will write “main()” function. Create an instance of  the class “Check” and  show how many  variables 
+    can be accessed directly and how many indirectly.
+
+class Check
+{
+	int i;
+	public int j;
+	protected int k;
+	private int m;
+	
+	public void dis(int i,int j,int k,int m)
+	{
+		System.out.println(i);
+		System.out.println(k);
+		System.out.println(j);
+		System.out.println(m);
+	}
+}
+public class CheckDemo {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Check c=new Check();
+		c.dis(5,6,7,8);
+	}
+
+}
+
+
+2) Create a class with static and non-static member variables. Define static and non-static member functions. 
+Create instance of this class and call both static and non-static member functions.
+
+class DStatic
+{
+	static int i=5;
+	String s;
+	static void dis()
+	{
+		System.out.println(i);
+	}
+	void show(String a,int j)
+	{
+		System.out.println(a+" "+j);
+	}
+}
+public class StaticDemo {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		DStatic d=new DStatic();
+		DStatic.dis();
+		d.show("sjdfh",7);
+	}
+
+}
+
+
+
+4) Show the example of single level inheritance with constructor invocation.
+
+class A
+{
+	A(){
+		System.out.println("A Constructor");
+	}
+}
+class B extends A
+{
+	B()
+	{
+		System.out.println("B Constructor");
+	}
+}
+public class SingleInherit {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new B();
+		
+	}
+
+}
+
+
+5) Show the example of multi-level inheritance with constructor invocation.
+
+class base
+{
+	int i=9;
+	base(int n){
+		System.out.println("A Constructor"+n);
+	}
+	void show()
+	{
+		System.out.println(i);
+	}
+}
+class sub1 extends base
+{
+	int j=4;
+	sub1()
+	{
+		super(3);
+		System.out.println("sub1 Constructor");
+	}
+	void dis() {
+		System.out.println(j);
+	}
+}
+class sub2 extends sub1
+{
+	sub2()
+	{
+		System.out.println("sub2 Constructor");
+	}
+}
+public class MultiLevel {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	   sub2 s=new sub2();
+	        
+	        s.show();
+	        s.dis();
+ 	}
+
+}
+
+
+
+6) Show the example of hierarchical inheritance with constructor invocation.
+
+class demo
+{
+	int i=9;
+	demo(int n){
+		System.out.println("Demo Constructor"+n);
+	}
+	void show()
+	{
+		System.out.println(i);
+	}
+}
+class file1 extends demo
+{
+	int j=4;
+	file1()
+	{
+		super(3);
+		System.out.println("file1 Constructor");
+	}
+	void dis() {
+		System.out.println(j);
+	}
+}
+class file2 extends demo
+{
+	file2()
+	{
+	
+		super(5);
+		System.out.println("file2 Constructor");
+		
+	}
+}
+public class Hierarchicalinherit {
+		public static void main(String args[])
+		{
+			file2 f=new file2();
+			f.show();
+			file1 f1=new file1();
+			f1.dis();
+			f1.show();
+		}
+}
+
+
+7) Define a parent and a child class . Now explain function overriding with Example.
+
+class v1
+{
+	public void dis()
+	{
+		System.out.println("overriden method");
+	}
+}
+class v2 extends v1
+{
+	public void dis()
+	{
+		
+		System.out.println("overriding method");
+	}
+}
+public class OverridingBase {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		v2 v=new v2();
+		v.dis();
+	}
+
+}
+
+
+8) Define a parent class with one function. Define child class with the function having same name as of parent class 
+    function, but having different argument.Create an instance of child class and call the functions. 
+    Make sure u have followed the concept of “function overloading “ in inheritance.
+
+
+class join
+{
+	public void add()
+	{
+		System.out.println("base method");
+	}
+}
+class sum extends join
+{
+	public void add(int i)
+	{
+		
+		System.out.println("overloading method");
+		System.out.println(i);
+	}
+}
+
+public class FunctionOverloading {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		sum s=new sum();
+		s.add(5);
+	}
+
+}
+
+
+
+9) Define a class “Shape” with “draw()” function . Now derive  classes like “Circle”, “Polygon”,”Rectangle” etc. 
+    from “Shape” and override “draw()” function. Define a class “ShapeDemo” in which  write  main()  function. 
+    In the main function create a reference to Shape class referring to any of the sub class. Using this reference, 
+    call “draw()” and check the result.
+
+class Shape
+{
+	void draw(){
+		System.out.println("Shape draw");
+	}
+}
+class Circle extends Shape
+{
+	void draw(){
+		System.out.println("Circle draw");
+	}
+}
+class Rectangle extends Shape
+{
+	void draw(){
+		System.out.println("Rectangle draw");
+	}
+}
+class Polygon extends  Shape
+{
+	void draw(){
+		System.out.println("Polygon draw");
+	}
+}
+
+public class ShapeDemo {
+
+	static void perform(Shape ref)
+	{
+		ref.draw();
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		perform(new Circle());
+		perform(new Rectangle());
+		perform(new Polygon());
+	}
+
+}
+
+
+
+
+10) Define an interface “Vechicle” with “start()” function . Now derive  classes like “TwoWheeler”, 
+      “ThreeWheeler”,”FourWheeler” etc. from “Vehicle” and override “start()” function. Define a class “VDemo” in 
+      which  write main()  function. In the main function create a reference to Vehicle  class referring to any of the sub class. Using this reference, call “start" method.
+
+class Vehical
+{
+	void start()
+	{
+		System.out.println("Start Vehical");
+	}
+}
+class TwoWheeler extends Vehical
+{
+	void start()
+	{
+		System.out.println("Start Two Wheeler");	
+	}
+	
+}
+class ThreeWheeler extends Vehical
+{
+	void start()
+	{
+		System.out.println("Start ThreeWheeler");
+	}
+	
+}
+class FourWheeler extends Vehical
+{
+	void start()
+	{
+		System.out.println("Start FourWheeler");
+	}
+	
+}
+public class Vdemo {
+
+	static void perform(Vehical ref)
+	{
+		ref.start();
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+	    
+		perform(new TwoWheeler());
+		perform(new ThreeWheeler());
+		perform(new FourWheeler());
+		
+	}
+
+}
+

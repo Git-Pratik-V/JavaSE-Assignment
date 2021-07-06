@@ -1,0 +1,150 @@
+
+Q.1  Display a table of a particular number.
+
+public class Table 
+{
+     public static void main(String args[])
+     {
+                     int i;
+     	   int num=2;
+                    int tab;
+	    for( i=1;i<=10;i++)
+	{
+                       tab=num*i;
+	       System.out.println(tab);             
+ 	}
+	
+}
+}
+
+Output:-
+E:\Core Java\Programs>java Table
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
+
+
+Q.2 using Switch case display wheather character is vowel or not.
+
+public class VowelSwitch
+{
+    public static void main(String args[])         
+{
+ char word= 'o';
+switch (word)
+{
+case 'a':System.out.println("It is vowel");
+break;
+case 'e':System.out.println("It is vowel");
+break;
+case 'i':System.out.println("It is vowel");
+break;
+case 'o':System.out.println("It is vowel");
+break;
+case 'u':System.out.println("It is vowel");
+break;
+default:System.out.println("It is not a vowel");
+}
+}
+}
+
+
+
+Q.3 Display numbers 1 to 10 using do while loop.
+
+public class DoWhile1
+{
+    public static void main(String args[])         
+{
+ int i=1;
+do
+{
+System.out.println(i);
+i++;
+}
+while(i<=10);
+}
+}
+
+Q.4 Display numbers from 3 to 30 except number 24 using while loop.
+
+public class While1
+{
+    public static void main(String args[])         
+{
+ int i=3;
+ while(i<=30)
+{
+  if(i==24)
+  {
+    i++;
+   continue;
+}
+System.out.println(i);
+i++;
+}
+}
+}
+
+
+Q.5 Using if....else if ...Else, display wheather results is fail,pass,second class,first class,Distinction etc.
+
+public class Marks
+{
+    public static void main(String args[])         
+{
+int marks=74;
+
+if(marks>=75)
+{
+System.out.println("Distinction");
+}
+
+else if(marks>=60 && marks<=74)
+{
+System.out.println("First Class");
+}
+
+else if(marks>=50 && marks<=59)
+{
+System.out.println("Second Class");
+}
+
+else if(marks>=35 && marks<=49)
+{
+System.out.println("Third Class");
+}
+
+else
+{
+System.out.println("Fail");
+}
+
+}
+}
+
+
+public class DoWhile1
+{
+    public static void main(String args[])         
+{
+ int i=1;
+do
+{
+System.out.println(i);
+i++;
+}
+while(i<=10);
+}
+}
+
+
+
+
